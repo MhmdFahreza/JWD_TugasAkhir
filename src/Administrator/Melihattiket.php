@@ -12,36 +12,51 @@
             margin: 10px auto;
             max-width: 600px;
         }
+
         .navbar-collapse-left {
             position: fixed;
             top: 0;
-            left: 0; /* Menempatkan navbar di sisi kiri */
+            left: 0;
+            /* Menempatkan navbar di sisi kiri */
             height: 100%;
             width: 250px;
             background-color: #343a40;
-            z-index: 1040; /* Memastikan di atas elemen lainnya */
-            overflow-y: auto; /* Scroll jika konten meluap */
+            z-index: 1040;
+            /* Memastikan di atas elemen lainnya */
+            overflow-y: auto;
+            /* Scroll jika konten meluap */
         }
+
         .profile-section {
             text-align: center;
         }
+
         .profile-section h5 {
-            font-size: 1.5rem; /* Memperbesar ukuran font */
+            font-size: 1.5rem;
+            /* Memperbesar ukuran font */
         }
+
         .profile-section .text-body-secondary {
             display: block;
-            font-size: 1.2rem; /* Memperbesar ukuran font */
+            font-size: 1.2rem;
+            /* Memperbesar ukuran font */
             margin-top: 10px;
         }
+
         .nav-link {
             transition: transform 0.2s, background-color 0.2s;
         }
+
         .nav-link:hover {
-            transform: translateX(10px); /* Animasi pada saat hover */
-            background-color: #495057; /* Warna latar belakang saat hover */
+            transform: translateX(10px);
+            /* Animasi pada saat hover */
+            background-color: #495057;
+            /* Warna latar belakang saat hover */
         }
+
         .nav-link:active {
-            transform: scale(0.95); /* Animasi saat mengklik */
+            transform: scale(0.95);
+            /* Animasi saat mengklik */
         }
     </style>
 </head>
@@ -64,7 +79,7 @@
                 <a class="nav-link text-light" href="Melihatpembayaran.php">Melihat Pembayaran</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light" href="Admin.html">Back</a>
+                <a class="nav-link text-light" href="back.html">Back</a>
             </li>
         </ul>
     </div>
@@ -75,28 +90,6 @@
             </button>
         </div>
     </nav>
-
-    <div class="alert-container">
-        <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <h4 class="alert-heading">Well done!</h4>
-                <p><?= htmlspecialchars($_SESSION['success_message']) ?></p>
-                <hr>
-                <p class="mb-0">Selamat anda telah login di tampilan Admin.</p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <script>
-                setTimeout(() => {
-                    const alertElement = document.querySelector('.alert');
-                    if (alertElement) {
-                        alertElement.classList.remove('show');
-                        alertElement.classList.add('hide');
-                    }
-                }, 5000);
-            </script>
-            <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
-    </div>
 </body>
 
 </html>
