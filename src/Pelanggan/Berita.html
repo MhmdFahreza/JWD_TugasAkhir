@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulau Komodo</title>
+  <link rel="stylesheet" href="main.css">
+  <script src="bootstrap.bundle.min.js"></script>
+  <style>
+    @keyframes menuClick {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .nav-link.active {
+      animation: menuClick 0.7s ease-in-out;
+    }
+
+    .bg-info-subtle {
+      background-color: #e3f2fd;
+    }
+
+    .text-info-emphasis {
+      color: #0288d1;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+      <img src="../img/logo.png" class="navbar-brand ms-5" alt="Bootstrap" width="60" height="60">
+      <a class="navbar-brand ms-lg-12" href="#">Pulau Komodo</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item ms-3">
+            <a class="nav-link" aria-current="page" href="Beranda.html">Beranda</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" href="Tentang.html">Tentang</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" href="Tiket.html">Tiket</a>
+          </li>
+          <li class="nav-item ms-3">
+            <a class="nav-link" href="Pemesanan.html">Pemesanan</a>
+          </li>
+          <li class="nav-item dropdown ms-3">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Informasi
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" class="nav-link active" href="Berita.html">Berita</a></li>
+              <li><a class="dropdown-item" href="jenisKomodo.html">Jenis Komodo</a></li>
+              <li><a class="dropdown-item" href="Kritikdansaran.html">Kritik & Saran</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const navLinks = document.querySelectorAll('.nav-link');
+  
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          // Remove the active class from all links
+          navLinks.forEach(link => link.classList.remove('active'));
+  
+          // Add the active class to the clicked link
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
