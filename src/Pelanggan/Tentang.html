@@ -33,6 +33,24 @@
     .text-info-emphasis {
       color: #0288d1;
     }
+
+    .card {
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    .card:hover {
+      background-color: #343a40;
+      color: #ffffff;
+    }
+
+    .card .card-body a.btn {
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    .card:hover .card-body a.btn {
+      background-color: #ffffff;
+      color: #343a40;
+    }
   </style>
 </head>
 
@@ -64,31 +82,80 @@
               Informasi
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Berita</a></li>
-              <li><a class="dropdown-item" href="#">Jenis Komodo</a></li>
-              <li><a class="dropdown-item" href="#">Contact</a></li>
+              <li><a class="dropdown-item" href="Berita.html">Berita</a></li>
+              <li><a class="dropdown-item" href="jenisKomodo.html">Jenis Komodo</a></li>
+              <li><a class="dropdown-item" href="Kritikdansaran.html">Kritik & Saran</a></li>
             </ul>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-</body>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('.nav-link');
+  <div class="container mt-lg-4">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="../img/aboutkomdo.jpg" class="img-fluid rounded-start" alt="pulau">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Pulau Komodo</h5>
+                <p class="card-text"><small class="text-light">Sumber berasal dari Wikipedia</small></p>
+                <p class="card-text">Pulau Komodo adalah sebuah pulau yang terletak di Kepulauan Nusa Tenggara, berada
+                  di sebelah timur Pulau Sumbawa, yang dipisahkan oleh Selat Sape. Pulau Komodo dikenal sebagai habitat
+                  asli hewan komodo.
+                  <br>
+                  <br>
+                  Pulau ini termasuk salah satu kawasan Taman Nasional Komodo yang dikelola oleh Pemerintah Pusat.
+                  <br>
+                  <br>
+                  Secara administratif, pulau ini termasuk wilayah Kabupaten Manggarai Barat, Kecamatan Komodo, Provinsi
+                  Nusa Tenggara Timur, Indonesia. Pulau Komodo merupakan ujung paling barat Provinsi Nusa Tenggara
+                  Timur, berbatasan dengan Provinsi Nusa Tenggara Barat.
+                  <br>
+                  <br>
+                  Di Pulau Komodo, hewan komodo hidup dan berkembang biak dengan baik. Hingga Agustus 2009, di pulau ini
+                  terdapat sekitar 1300 ekor komodo. Ditambah dengan pulau lain, seperti Pulau Rinca dan dan Gili
+                  Motang, jumlah mereka keseluruhan mencapai sekitar 2500 ekor. Ada pula sekitar 100 ekor komodo di
+                  Cagar Alam Wae Wuul di daratan Pulau Flores tapi tidak termasuk wilayah Taman Nasional Komodo.
+                  <br>
+                  <br>
+                  Selain komodo, pulau ini juga menyimpan eksotisme flora yang beragam kayu sepang yang oleh warga
+                  sekitar digunakan sebagi obat dan bahan pewarna pakaian, pohon nitak ini atau sterculia oblongata di
+                  yakini berguna sebagai obat dan bijinya gurih dan enak seperti kacang polong.
+                  <br>
+                  <br>
+                  Pulau Komodo juga diterima sebagai Situs Warisan Dunia UNESCO, karena dalam wilayah Taman Nasional
+                  Komodo, bersama dengan Pulau Rinca, Pulau Padar dan Gili Motang
+                </p>
+                <br>
+                <a href="https://id.wikipedia.org/wiki/Pulau_Komodo" class="btn btn-primary">Pelajari Lebih Lanjut</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    navLinks.forEach(link => {
-      link.addEventListener('click', function () {
-        // Remove the active class from all links
-        navLinks.forEach(link => link.classList.remove('active'));
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const navLinks = document.querySelectorAll('.nav-link');
 
-        // Add the active class to the clicked link
-        this.classList.add('active');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+          // Remove the active class from all links
+          navLinks.forEach(link => link.classList.remove('active'));
+
+          // Add the active class to the clicked link
+          this.classList.add('active');
+        });
       });
     });
-  });
-</script>
+  </script>
+</body>
 
 </html>
