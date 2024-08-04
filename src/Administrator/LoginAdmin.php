@@ -7,6 +7,7 @@ $valid_password = "12345";
 
 // Initialize error message
 $error_message = '';
+$success_message = '';
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -15,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Validate credentials
     if ($nickname === $valid_nickname && $password === $valid_password) {
-        // Login successful, redirect to admin page
+        // Set success message and redirect to admin page
+        $_SESSION['success_message'] = "Login berhasil! Selamat datang, Admin.";
         header("Location: admin.html");
         exit();
     } else {
