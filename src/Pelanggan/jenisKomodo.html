@@ -4,33 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulau Komodo</title>
+  <title>Pulau Komodo - Jenis Hewan</title>
   <link rel="stylesheet" href="main.css">
   <script src="bootstrap.bundle.min.js"></script>
   <style>
-    @keyframes menuClick {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.1);
-      }
-
-      100% {
-        transform: scale(1);
-      }
+    .animal-category {
+      text-align: center;
+      margin: 20px 0;
     }
 
-    .nav-link.active {
-      animation: menuClick 0.7s ease-in-out;
+    .animal-category img {
+      width: 100%;
+      height: 360px;
+      border-radius: 15px;
     }
 
-    .bg-info-subtle {
-      background-color: #e3f2fd;
-    }
-
-    .text-info-emphasis {
+    .animal-category h3 {
+      margin-top: 10px;
       color: #0288d1;
     }
   </style>
@@ -39,7 +29,7 @@
 <body>
   <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
     <div class="container-fluid">
-      <img src="../img/logo.png" class="navbar-brand ms-5" alt="Bootstrap" width="60" height="60">
+      <img src="../img/logo.png" class="navbar-brand ms-5" alt="Logo" width="60" height="60">
       <a class="navbar-brand ms-lg-12" href="#">Pulau Komodo</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
         aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +55,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="Berita.html">Berita</a></li>
-              <li><a class="dropdown-item" style="background-color: #0288d1;" href="jenisKomodo.html">Jenis Komodo</a></li>
+              <li><a class="dropdown-item" style="background-color: #0288d1;" href="jenisKomodo.html">Jenis Hewan</a></li>
               <li><a class="dropdown-item" href="Kritikdansaran.html">Kritik & Saran</a></li>
             </ul>
           </li>
@@ -74,22 +64,48 @@
     </div>
   </nav>
 
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-4 animal-category">
+        <img src="../img/Komododo.jpg" alt="Mammals">
+        <h3>Komodo</h3>
+      </div>
+      <div class="col-md-4 animal-category">
+        <img src="../img/Kudada.jpg" alt="Reptiles">
+        <h3>Kuda</h3>
+      </div>
+      <div class="col-md-4 animal-category">
+        <img src="../img/kera.png" alt="Birds">
+        <h3>Kera</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 animal-category">
+        <img src="../img/Rusa.jpg" alt="Fish">
+        <h3>Rusa</h3>
+      </div>
+      <div class="col-md-6 animal-category">
+        <img src="../img/babihutan.jpg" alt="Amphibians">
+        <h3>Babi Hutan</h3>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('.nav-link');
-  
+
       navLinks.forEach(link => {
         link.addEventListener('click', function () {
           // Remove the active class from all links
           navLinks.forEach(link => link.classList.remove('active'));
-  
+
           // Add the active class to the clicked link
           this.classList.add('active');
         });
       });
     });
   </script>
-
 </body>
 
 </html>
