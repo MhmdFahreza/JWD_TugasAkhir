@@ -7,16 +7,16 @@ $pass = '';
 $mysqli = new mysqli($host, $user, $pass, $db);
 
 if ($mysqli->connect_error) {
-    die("Koneksi gagal: " . $mysqli->connect_error);
+  die("Koneksi gagal: " . $mysqli->connect_error);
 }
 
 $result = $mysqli->query("SELECT * FROM tiket");
 
 $tickets = [];
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $tickets[] = $row;
-    }
+  while ($row = $result->fetch_assoc()) {
+    $tickets[] = $row;
+  }
 }
 
 $mysqli->close();
@@ -99,6 +99,7 @@ $mysqli->close();
     }
 
     @keyframes blink {
+
       0%,
       100% {
         opacity: 1;
@@ -152,8 +153,7 @@ $mysqli->close();
     <div class="container-fluid">
       <img src="../img/logo.png" class="navbar-brand ms-5" alt="Bootstrap" width="60" height="60">
       <a class="navbar-brand ms-lg-12" href="#">Pulau Komodo</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -198,21 +198,25 @@ $mysqli->close();
           <th scope="col">Tanggal Pembelian</th>
           <th scope="col">Jumlah Orang</th>
           <th scope="col">Status</th>
-          <th scope="col">Ubah</th>
+          <th scope="col">Keterangan</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($tickets as $index => $ticket) : ?>
-        <tr data-id="<?= $ticket['id'] ?>">
-          <th scope="row"><?= $index + 1 ?></th>
-          <td class="name"><?= htmlspecialchars($ticket['name']) ?></td>
-          <td class="date"><?= htmlspecialchars($ticket['date']) ?></td>
-          <td class="people"><?= htmlspecialchars($ticket['people']) ?></td>
-          <td class="status"><?= htmlspecialchars($ticket['status']) ?></td>
-          <td>
-            <button class="btn btn-warning btn-edit" data-id="<?= $ticket['id'] ?>">Edit</button>
-          </td>
-        </tr>
+          <tr data-id="<?= $ticket['id'] ?>">
+            <th scope="row"><?= $index + 1 ?></th>
+            <td class="name"><?= htmlspecialchars($ticket['name']) ?></td>
+            <td class="date"><?= htmlspecialchars($ticket['date']) ?></td>
+            <td class="people"><?= htmlspecialchars($ticket['people']) ?></td>
+            <td class="status"><?= htmlspecialchars($ticket['status']) ?></td>
+            <td>
+              <?php if ($ticket['status'] === 'Menunggu') : ?>
+                <button class="btn btn-warning btn-edit" data-id="<?= $ticket['id'] ?>">Edit</button>
+              <?php else : ?>
+                <span class="text-info">Lanjutkan ke Menu Pemesanan</span>
+              <?php endif; ?>
+            </td>
+          </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
@@ -256,7 +260,7 @@ $mysqli->close();
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const navLinks = document.querySelectorAll('.nav-link');
       const peopleInput = document.getElementById('people');
       const totalPriceOutput = document.getElementById('totalPrice');
@@ -264,19 +268,19 @@ $mysqli->close();
       const ticketTableBody = document.querySelector('#ticketTable tbody');
 
       navLinks.forEach(link => {
-        link.addEventListener('click', function () {
+        link.addEventListener('click', function() {
           navLinks.forEach(link => link.classList.remove('active'));
           this.classList.add('active');
         });
       });
 
-      peopleInput.addEventListener('input', function () {
+      peopleInput.addEventListener('input', function() {
         const numberOfPeople = parseInt(peopleInput.value) || 0;
         const totalPrice = numberOfPeople * pricePerPerson;
         totalPriceOutput.textContent = `Rp. ${totalPrice.toLocaleString()}`;
       });
 
-      $('#saveButton').on('click', function () {
+      $('#saveButton').on('click', function() {
         const ticketId = $('#ticketId').val();
         const name = $('#name').val();
         const date = $('#date').val();
@@ -296,7 +300,7 @@ $mysqli->close();
                 people: people,
                 totalPrice: totalPrice
               },
-              success: function (response) {
+              success: function(response) {
                 $('#confirmationMessage').text(response);
                 $('#confirmationMessage').css('color', 'green');
                 $('#ticketModal').modal('hide');
@@ -307,25 +311,29 @@ $mysqli->close();
                   row.querySelector('.name').textContent = name;
                   row.querySelector('.date').textContent = date;
                   row.querySelector('.people').textContent = people;
+                  row.querySelector('.status').textContent = 'Menunggu';
+                  row.querySelector('.btn-edit').style.display = 'block';
+                  row.querySelector('.btn-secondary').style.display = 'none';
+                  row.querySelector('.text-info').style.display = 'none';
                 } else {
                   // Add new entry
                   const newRow = document.createElement('tr');
                   const id = new Date().getTime();
                   newRow.setAttribute('data-id', id);
                   newRow.innerHTML = `
-                    <th scope="row">${ticketTableBody.children.length + 1}</th>
-                    <td class="name">${name}</td>
-                    <td class="date">${date}</td>
-                    <td class="people">${people}</td>
-                    <td class="status">Menunggu</td>
-                    <td>
-                      <button class="btn btn-warning btn-edit" data-id="${id}">Edit</button>
-                    </td>
-                  `;
+                                        <th scope="row">${ticketTableBody.children.length + 1}</th>
+                                        <td class="name">${name}</td>
+                                        <td class="date">${date}</td>
+                                        <td class="people">${people}</td>
+                                        <td class="status">Menunggu</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-edit" data-id="${id}">Edit</button>
+                                        </td>
+                                    `;
                   ticketTableBody.appendChild(newRow);
                 }
               },
-              error: function (xhr, status, error) {
+              error: function(xhr, status, error) {
                 $('#confirmationMessage').text('Terjadi kesalahan. Data gagal disimpan.');
                 $('#confirmationMessage').css('color', 'red');
               }
@@ -336,7 +344,7 @@ $mysqli->close();
         }
       });
 
-      ticketTableBody.addEventListener('click', function (event) {
+      ticketTableBody.addEventListener('click', function(event) {
         if (event.target.classList.contains('btn-edit')) {
           const row = event.target.closest('tr');
           const id = row.getAttribute('data-id');
@@ -344,12 +352,16 @@ $mysqli->close();
           const date = row.querySelector('.date').textContent;
           const people = row.querySelector('.people').textContent;
 
+          if (row.querySelector('.status').textContent !== 'Menunggu') {
+            alert('Tiket sudah disetujui dan tidak dapat diedit.');
+            return;
+          }
+
           $('#ticketId').val(id);
           $('#name').val(name);
           $('#date').val(date);
           $('#people').val(people);
-          $('#totalPrice').text(`Rp. ${(parseInt(people) * pricePerPerson).toLocaleString()}`);
-
+          $('#totalPrice').text(`Rp. ${parseInt(people) * 20000}`);
           $('#ticketModal').modal('show');
         }
       });

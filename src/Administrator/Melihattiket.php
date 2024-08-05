@@ -127,7 +127,7 @@ $mysqli->close();
                 <a class="nav-link text-light" href="Melihatpesanan.php">Melihat Pesanan</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light" href="Melihatpembayaran.php">Melihat Pembayaran</a>
+                <a class="nav-link text-light" href="Melihatkritik.php">Melihat Kritik & Saran</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-light" href="LoginAdmin.php">Log Out</a>

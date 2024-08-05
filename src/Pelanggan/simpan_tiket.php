@@ -1,11 +1,4 @@
 <?php
-$ticketId = $_POST['ticketId'] ?? '';
-$name = $_POST['name'] ?? '';
-$date = $_POST['date'] ?? '';
-$people = $_POST['people'] ?? '';
-$totalPrice = $_POST['totalPrice'] ?? '';
-$totalPrice = str_replace(['Rp.', ','], '', $totalPrice);
-
 $host = 'localhost';
 $db = 'pulau_komodo';
 $user = 'root';
@@ -17,20 +10,36 @@ if ($mysqli->connect_error) {
     die("Koneksi gagal: " . $mysqli->connect_error);
 }
 
+$ticketId = $_POST['ticketId'];
+$name = $_POST['name'];
+$date = $_POST['date'];
+$people = $_POST['people'];
+$totalPrice = $_POST['totalPrice'];
+
 if ($ticketId) {
-    $stmt = $mysqli->prepare("UPDATE tiket SET name = ?, date = ?, people = ?, total_price = ?, status = 'Menunggu' WHERE id = ?");
-    $stmt->bind_param("ssiii", $name, $date, $people, $totalPrice, $ticketId);
+    // Update existing ticket
+    $stmt = $mysqli->prepare("UPDATE tiket SET name = ?, date = ?, people = ?, status = 'Menunggu' WHERE id = ?");
+    $stmt->bind_param('ssii', $name, $date, $people, $ticketId);
+    if ($stmt->execute()) {
+        echo 'Data tiket berhasil diperbarui.';
+    } else {
+        echo 'Terjadi kesalahan saat memperbarui data tiket.';
+    }
+    $stmt->close();
 } else {
-    $stmt = $mysqli->prepare("INSERT INTO tiket (name, date, people, total_price, status) VALUES (?, ?, ?, ?, 'Menunggu')");
-    $stmt->bind_param("ssii", $name, $date, $people, $totalPrice);
+    // Insert new ticket
+    $stmt = $mysqli->prepare("INSERT INTO tiket (name, date, people, status) VALUES (?, ?, ?, 'Menunggu')");
+    $stmt->bind_param('ssi', $name, $date, $people);
+    if ($stmt->execute()) {
+        echo 'Tiket berhasil ditambahkan.';
+        echo "<form action='Melihatkritik.php' method='get'>
+                <button type='submit'>Back</button>
+              </form>";
+    } else {
+        echo 'Terjadi kesalahan saat menambahkan tiket.';
+    }
+    $stmt->close();
 }
 
-if ($stmt->execute()) {
-    echo "Data berhasil disimpan!";
-} else {
-    echo "Terjadi kesalahan. Data gagal disimpan.";
-}
-
-$stmt->close();
 $mysqli->close();
 ?>

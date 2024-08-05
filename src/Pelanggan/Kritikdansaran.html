@@ -33,6 +33,30 @@
     .text-info-emphasis {
       color: #0288d1;
     }
+
+    .form-container {
+      width: 100%;
+      max-width: 500px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      justify-content: center;
+    }
+
+    .form-wrapper .form-control {
+      border-radius: 0.25rem;
+    }
+
+    body {
+      animation: fadeIn 2s ease-in-out, blink 1.5s infinite;
+      background-image: url('../img/aboutkomdo.jpg');
+      height: 720px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+    }
   </style>
 </head>
 
@@ -73,23 +97,41 @@
       </div>
     </div>
   </nav>
+  <br><br>
+  <div class="form-background">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <form action="submit_feedback.php" method="post">
+            <div class="mb-3">
+              <label for="name" class="form-label"><h4>Nama</h4></label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama Anda">
+            </div>
+            <div class="mb-3">
+              <label for="feedback" class="form-label"><h4>Kritik & Saran</h4></label>
+              <textarea class="form-control" id="feedback" name="feedback" rows="4"
+                placeholder="Masukkan kritik dan saran Anda"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Kirim</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('.nav-link');
-  
+
       navLinks.forEach(link => {
         link.addEventListener('click', function () {
-          // Remove the active class from all links
           navLinks.forEach(link => link.classList.remove('active'));
-  
-          // Add the active class to the clicked link
+
           this.classList.add('active');
         });
       });
     });
   </script>
-
 </body>
 
 </html>

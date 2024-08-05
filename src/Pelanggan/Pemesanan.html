@@ -33,6 +33,20 @@
     .text-info-emphasis {
       color: #0288d1;
     }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 75px); /* Adjust height according to the navbar height */
+    }
+
+    .form-container form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 
@@ -73,6 +87,16 @@
       </div>
     </div>
   </nav>
+
+  <div class="form-container">
+    <form action="processOrder.php" method="POST">
+      <div class="mb-3">
+        <label for="orderNumber" class="form-label">Nomor Pesanan</label>
+        <input type="text" class="form-control" id="orderNumber" name="orderNumber" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
