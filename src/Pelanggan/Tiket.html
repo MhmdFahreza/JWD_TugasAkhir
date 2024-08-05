@@ -7,6 +7,7 @@
   <title>Pulau Komodo</title>
   <link rel="stylesheet" href="main.css">
   <script src="bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     @keyframes menuClick {
       0% {
@@ -26,18 +27,105 @@
       animation: menuClick 0.8s ease-in-out;
     }
 
-    .bg-info-subtle {
-      background-color: #e3f2fd;
+    body {
+      animation: fadeIn 2s ease-in-out, blink 1.5s infinite;
+      background-image: url('../img/backgroundtiket.jpg');
+      height: 720px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
     }
 
-    .text-info-emphasis {
-      color: #0288d1;
+    .navbar {
+      background-color: rgba(227, 242, 253, 0.8);
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .modal-content {
+      color: #000;
+    }
+
+    .btn-primary {
+      animation: buttonShake 10s infinite alternate;
+    }
+
+    h2 {
+      animation: titleBounce 7s infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes buttonShake {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes titleBounce {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+  <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <img src="../img/logo.png" class="navbar-brand ms-5" alt="Bootstrap" width="60" height="60">
       <a class="navbar-brand ms-lg-12" href="#">Pulau Komodo</a>
@@ -74,19 +162,106 @@
     </div>
   </nav>
 
+  <div class="container mt-4">
+    <h2>Pembelian Tiket</h2>
+    <br>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ticketModal">+ Beli Tiket</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ticketModalLabel">Pembelian Tiket</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="name" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Nama Anda">
+              </div>
+              <div class="mb-3">
+                <label for="date" class="form-label">Tanggal Pembelian Tiket</label>
+                <input type="date" class="form-control" id="date" name="date">
+              </div>
+              <div class="mb-3">
+                <label for="people" class="form-label">Jumlah Orang</label>
+                <input type="number" class="form-control" id="people" name="people" placeholder="Jumlah Orang" min="1">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Total Harga</label>
+                <p id="totalPrice" class="form-control-plaintext">Rp. 0</p>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="saveButton">Simpan</button>
+            <div id="confirmationMessage" class="text-warning mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('.nav-link');
+      const peopleInput = document.getElementById('people');
+      const totalPriceOutput = document.getElementById('totalPrice');
+      const pricePerPerson = 20000;
 
       navLinks.forEach(link => {
         link.addEventListener('click', function () {
-          // Remove the active class from all links
           navLinks.forEach(link => link.classList.remove('active'));
 
-          // Add the active class to the clicked link
           this.classList.add('active');
         });
       });
+
+      peopleInput.addEventListener('input', function () {
+        const numberOfPeople = parseInt(peopleInput.value) || 0;
+        const totalPrice = numberOfPeople * pricePerPerson;
+        totalPriceOutput.textContent = `Rp. ${totalPrice.toLocaleString()}`;
+      });
+
+
+      $('#saveButton').on('click', function () {
+        const name = $('#name').val();
+        const date = $('#date').val();
+        const people = $('#people').val();
+        const totalPrice = $('#totalPrice').text();
+
+        if (name && date && people) {
+          const confirmation = confirm('Apakah Anda sudah yakin?');
+          if (confirmation) {
+            $.ajax({
+              url: '/JWD_TugasAkhir/src/Pelanggan/simpan_tiket.php',
+              method: 'POST',
+              data: {
+                name: name,
+                date: date,
+                people: people,
+                totalPrice: totalPrice
+              },
+              success: function (response) {
+                $('#confirmationMessage').text(response);
+                $('#confirmationMessage').css('color', 'green');
+                $('#ticketModal').modal('hide');
+              },
+              error: function (xhr, status, error) {
+                $('#confirmationMessage').text('Terjadi kesalahan. Data gagal disimpan.');
+                $('#confirmationMessage').css('color', 'red');
+              }
+            });
+          }
+        } else {
+          alert('Harap isi semua bidang.');
+        }
+      });
+
+
+
     });
   </script>
 
