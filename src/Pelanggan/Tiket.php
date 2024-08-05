@@ -1,3 +1,28 @@
+<?php
+$host = 'localhost';
+$db = 'pulau_komodo';
+$user = 'root';
+$pass = '';
+
+$mysqli = new mysqli($host, $user, $pass, $db);
+
+if ($mysqli->connect_error) {
+    die("Koneksi gagal: " . $mysqli->connect_error);
+}
+
+$result = $mysqli->query("SELECT * FROM tiket");
+
+$tickets = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $tickets[] = $row;
+    }
+}
+
+$mysqli->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +32,6 @@
   <title>Pulau Komodo</title>
   <link rel="stylesheet" href="main.css">
   <script src="bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     @keyframes menuClick {
       0% {
@@ -75,7 +99,6 @@
     }
 
     @keyframes blink {
-
       0%,
       100% {
         opacity: 1;
@@ -167,7 +190,33 @@
     <br>
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ticketModal">+ Beli Tiket</button>
 
-    <!-- Modal -->
+    <table class="table" id="ticketTable">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nama</th>
+          <th scope="col">Tanggal Pembelian</th>
+          <th scope="col">Jumlah Orang</th>
+          <th scope="col">Status</th>
+          <th scope="col">Ubah</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($tickets as $index => $ticket) : ?>
+        <tr data-id="<?= $ticket['id'] ?>">
+          <th scope="row"><?= $index + 1 ?></th>
+          <td class="name"><?= htmlspecialchars($ticket['name']) ?></td>
+          <td class="date"><?= htmlspecialchars($ticket['date']) ?></td>
+          <td class="people"><?= htmlspecialchars($ticket['people']) ?></td>
+          <td class="status"><?= htmlspecialchars($ticket['status']) ?></td>
+          <td>
+            <button class="btn btn-warning btn-edit" data-id="<?= $ticket['id'] ?>">Edit</button>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+
     <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -177,6 +226,7 @@
           </div>
           <div class="modal-body">
             <form>
+              <input type="hidden" id="ticketId" name="ticketId">
               <div class="mb-3">
                 <label for="name" class="form-label">Nama</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Nama Anda">
@@ -204,17 +254,18 @@
     </div>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('.nav-link');
       const peopleInput = document.getElementById('people');
       const totalPriceOutput = document.getElementById('totalPrice');
       const pricePerPerson = 20000;
+      const ticketTableBody = document.querySelector('#ticketTable tbody');
 
       navLinks.forEach(link => {
         link.addEventListener('click', function () {
           navLinks.forEach(link => link.classList.remove('active'));
-
           this.classList.add('active');
         });
       });
@@ -225,8 +276,8 @@
         totalPriceOutput.textContent = `Rp. ${totalPrice.toLocaleString()}`;
       });
 
-
       $('#saveButton').on('click', function () {
+        const ticketId = $('#ticketId').val();
         const name = $('#name').val();
         const date = $('#date').val();
         const people = $('#people').val();
@@ -239,6 +290,7 @@
               url: '/JWD_TugasAkhir/src/Pelanggan/simpan_tiket.php',
               method: 'POST',
               data: {
+                ticketId: ticketId,
                 name: name,
                 date: date,
                 people: people,
@@ -248,6 +300,30 @@
                 $('#confirmationMessage').text(response);
                 $('#confirmationMessage').css('color', 'green');
                 $('#ticketModal').modal('hide');
+
+                if (ticketId) {
+                  // Edit existing entry
+                  const row = document.querySelector(`tr[data-id='${ticketId}']`);
+                  row.querySelector('.name').textContent = name;
+                  row.querySelector('.date').textContent = date;
+                  row.querySelector('.people').textContent = people;
+                } else {
+                  // Add new entry
+                  const newRow = document.createElement('tr');
+                  const id = new Date().getTime();
+                  newRow.setAttribute('data-id', id);
+                  newRow.innerHTML = `
+                    <th scope="row">${ticketTableBody.children.length + 1}</th>
+                    <td class="name">${name}</td>
+                    <td class="date">${date}</td>
+                    <td class="people">${people}</td>
+                    <td class="status">Menunggu</td>
+                    <td>
+                      <button class="btn btn-warning btn-edit" data-id="${id}">Edit</button>
+                    </td>
+                  `;
+                  ticketTableBody.appendChild(newRow);
+                }
               },
               error: function (xhr, status, error) {
                 $('#confirmationMessage').text('Terjadi kesalahan. Data gagal disimpan.');
@@ -260,11 +336,25 @@
         }
       });
 
+      ticketTableBody.addEventListener('click', function (event) {
+        if (event.target.classList.contains('btn-edit')) {
+          const row = event.target.closest('tr');
+          const id = row.getAttribute('data-id');
+          const name = row.querySelector('.name').textContent;
+          const date = row.querySelector('.date').textContent;
+          const people = row.querySelector('.people').textContent;
 
+          $('#ticketId').val(id);
+          $('#name').val(name);
+          $('#date').val(date);
+          $('#people').val(people);
+          $('#totalPrice').text(`Rp. ${(parseInt(people) * pricePerPerson).toLocaleString()}`);
 
+          $('#ticketModal').modal('show');
+        }
+      });
     });
   </script>
-
 </body>
 
 </html>

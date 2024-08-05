@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulau Komodo</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script src="bootstrap.bundle.min.js"></script>
     <style>
         .alert-container {
             margin: 10px auto;
@@ -58,6 +58,16 @@
             transform: scale(0.95);
             /* Animasi saat mengklik */
         }
+
+        body {
+            animation: fadeIn 2s ease-in-out, blink 1.5s infinite;
+            background-image: url('../img/backgroundtiket.jpg');
+            height: 720px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -70,16 +80,19 @@
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
+                <a class="nav-link text-light" href="Admin.html">Menu Utama</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-light" href="Melihattiket.php">Melihat Tiket</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-light" href="Melihatpesanan.php">Melihat Pesanan</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light" href="Melihatpembayaran.php">Melihat Pembayaran</a>
+                <a class="nav-link text-light rounded-2" style="background-color: cyan;" href="Melihatpembayaran.php">Melihat Pembayaran</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-light" href="back.html">Back</a>
+                <a class="nav-link text-light" href="LoginAdmin.php">Log Out</a>
             </li>
         </ul>
     </div>
