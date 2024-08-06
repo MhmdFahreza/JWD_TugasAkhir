@@ -7,6 +7,7 @@
   <title>Pulau Komodo</title>
   <link rel="stylesheet" href="main.css">
   <script src="bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <style>
     @keyframes menuClick {
       0% {
@@ -38,7 +39,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 75px); /* Adjust height according to the navbar height */
+      height: calc(100vh - 75px);
     }
 
     .form-container form {
@@ -61,22 +62,14 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item ms-3">
-            <a class="nav-link" aria-current="page" href="Beranda.html">Beranda</a>
-          </li>
-          <li class="nav-item ms-3">
-            <a class="nav-link" href="Tentang.html">Tentang</a>
-          </li>
-          <li class="nav-item ms-3">
-            <a class="nav-link" href="Tiket.php">Tiket</a>
-          </li>
-          <li class="nav-item ms-3">
-            <a class="nav-link active rounded-top-2" style="background-color: #0288d1;" href="Pemesanan.html">Pemesanan</a>
-          </li>
+          <li class="nav-item ms-3"><a class="nav-link" aria-current="page" href="Beranda.html">Beranda</a></li>
+          <li class="nav-item ms-3"><a class="nav-link" href="Tentang.html">Tentang</a></li>
+          <li class="nav-item ms-3"><a class="nav-link" href="Tiket.php">Tiket</a></li>
+          <li class="nav-item ms-3"><a class="nav-link active rounded-top-2" style="background-color: #0288d1;"
+              href="Pemesanan.html">Pemesanan</a></li>
           <li class="nav-item dropdown ms-3">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Informasi
-            </a>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">Informasi</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="Berita.html">Berita</a></li>
               <li><a class="dropdown-item" href="jenisKomodo.html">Jenis Hewan</a></li>
@@ -89,31 +82,105 @@
   </nav>
 
   <div class="form-container">
-    <form action="processOrder.php" method="POST">
+    <form id="orderForm" action="processOrder.php" method="POST">
       <div class="mb-3">
-        <label for="orderNumber" class="form-label">Nomor Pesanan</label>
-        <input type="text" class="form-control" id="orderNumber" name="orderNumber" required>
+        <label for="orderName" class="form-label">Nama Pesanan</label>
+        <input type="text" class="form-control" id="orderName" name="orderName" required>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 
+  <!-- Modal for Payment Form -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel">Form Pembayaran</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="paymentForm" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="customerName" class="form-label">Nama</label>
+              <input type="text" class="form-control" id="customerName" name="customerName" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="purchaseDate" class="form-label">Tanggal Pembelian</label>
+              <input type="date" class="form-control" id="purchaseDate" name="purchaseDate" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="peopleCount" class="form-label">Jumlah Orang</label>
+              <input type="number" class="form-control" id="peopleCount" name="peopleCount" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="totalPrice" class="form-label">Total Harga</label>
+              <input type="number" class="form-control" id="totalPrice" name="totalPrice" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="adminName" class="form-label">Nama Admin</label>
+              <input type="text" class="form-control" id="adminName" name="adminName" value="Muhammad Fahreza" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="virtualAccount" class="form-label">Virtual Account</label>
+              <input type="text" class="form-control" id="virtualAccount" name="virtualAccount" value="192343423523325" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="paymentProof" class="form-label">Upload Bukti Pembayaran</label>
+              <input type="file" class="form-control" id="paymentProof" name="paymentProof" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('.nav-link');
-  
-      navLinks.forEach(link => {
-        link.addEventListener('click', function () {
-          // Remove the active class from all links
-          navLinks.forEach(link => link.classList.remove('active'));
-  
-          // Add the active class to the clicked link
-          this.classList.add('active');
-        });
-      });
+    document.getElementById('orderForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const orderName = document.getElementById('orderName').value;
+
+      fetch('processOrder.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderName: orderName })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Response from processOrder.php:', data); // Check response in console
+          if (data.success) {
+            document.getElementById('customerName').value = data.name;
+            document.getElementById('purchaseDate').value = data.date;
+            document.getElementById('peopleCount').value = data.people;
+            document.getElementById('totalPrice').value = data.totalPrice;
+            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            paymentModal.show();
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch('processPayment.php', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(data => {
+          alert(data);
+          location.reload();
+        })
+        .catch(error => console.error('Error:', error));
     });
   </script>
-
 </body>
 
 </html>
